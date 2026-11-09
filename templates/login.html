@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_auth_macros.html" import field %}
+
+{% block title %}Вход · Полка{% endblock %}
+
+{% block content %}
+<div class="form-page auth-page">
+  <h1>Вход</h1>
+
+  {% if errors.form %}<p class="form-alert" role="alert">{{ errors.form }}</p>{% endif %}
+
+  <form class="form" method="post" action="/login">
+    {{ field("email", "Email", "email", values.email or "", errors, autocomplete="email") }}
+    {{ field("password", "Пароль", "password", "", errors, autocomplete="current-password") }}
+    <button class="button button-block" type="submit">Войти</button>
+  </form>
+
+  <p class="auth-switch">Нет аккаунта? <a href="/register">Зарегистрироваться</a></p>
+</div>
+{% endblock %}

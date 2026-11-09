@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Полка{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400&family=Manrope:wght@400..700&display=swap">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap site-header-row">
+      <a class="logo" href="/">Полка<span aria-hidden="true">.</span></a>
+      <nav class="site-nav" aria-label="Основное меню">
+        <a class="nav-link" href="/about" {% if request.url.path == "/about" %}aria-current="page"{% endif %}>О компании</a>
+        {% if user %}
+        <a class="nav-link" href="/account" {% if request.url.path == "/account" %}aria-current="page"{% endif %}>Кабинет</a>
+        {% else %}
+        <a class="nav-link" href="/login" {% if request.url.path == "/login" %}aria-current="page"{% endif %}>Войти</a>
+        {% endif %}
+        <a class="button button-small" href="/books/new">Добавить книгу</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap site-footer-row">
+      <span>Полка: блог о прочитанных книгах</span>
+      <nav class="footer-nav" aria-label="Разделы сайта">
+        <a href="/bestsellers" {% if request.url.path == "/bestsellers" %}aria-current="page"{% endif %}>Бестселлеры</a>
+        {% if user %}
+        <a href="/account" {% if request.url.path == "/account" %}aria-current="page"{% endif %}>Личный кабинет</a>
+        {% else %}
+        <a href="/register" {% if request.url.path == "/register" %}aria-current="page"{% endif %}>Регистрация</a>
+        <a href="/login" {% if request.url.path == "/login" %}aria-current="page"{% endif %}>Вход</a>
+        {% endif %}
+      </nav>
+    </div>
+  </footer>
+
+  {% if toast %}<div class="toast" role="status">{{ toast }}</div>{% endif %}
+</body>
+</html>

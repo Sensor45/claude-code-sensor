@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_auth_macros.html" import field %}
+
+{% block title %}Регистрация · Полка{% endblock %}
+
+{% block content %}
+<div class="form-page auth-page">
+  <h1>Регистрация</h1>
+
+  <form class="form" method="post" action="/register">
+    {{ field("email", "Email", "email", values.email or "", errors, autocomplete="email") }}
+    {{ field("password", "Пароль", "password", "", errors, autocomplete="new-password",
+             hint="Не короче 8 символов, буквы и цифры.") }}
+    {{ field("password2", "Повторите пароль", "password", "", errors, autocomplete="new-password") }}
+    <button class="button button-block" type="submit">Создать аккаунт</button>
+  </form>
+
+  <p class="auth-switch">Уже есть аккаунт? <a href="/login">Войти</a></p>
+</div>
+{% endblock %}

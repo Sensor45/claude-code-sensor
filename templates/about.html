@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}О компании · Полка{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">О компании</p>
+  <h1>Мы рассказываем о книгах честно</h1>
+  <p>Полка собирает заметки о прочитанном, чтобы вам было проще выбрать следующую книгу.</p>
+</section>
+
+<dl class="stats">
+  <div>
+    <dd>{{ stats.books }}</dd>
+    <dt>Книг на полке</dt>
+  </div>
+  <div>
+    <dd>{{ stats.genres }}</dd>
+    <dt>Жанров</dt>
+  </div>
+  <div>
+    <dd>{{ ("%.1f" | format(stats.rating)).replace(".", ",") if stats.rating else "–" }}</dd>
+    <dt>Средняя оценка</dt>
+  </div>
+</dl>
+
+<section class="about-section">
+  <h2>Что мы делаем</h2>
+  <div class="about-grid">
+    <div>
+      <h3>Читаем</h3>
+      <p>Берём и классику, и современные книги, разные по жанрам и настроению.</p>
+    </div>
+    <div>
+      <h3>Разбираем</h3>
+      <p>Пишем, что зацепило, что разочаровало и кому книга может подойти.</p>
+    </div>
+    <div>
+      <h3>Оцениваем</h3>
+      <p>Ставим каждой книге оценку от одной до пяти звёзд, чтобы её было легко сравнить с другими.</p>
+    </div>
+  </div>
+</section>
+
+<section class="about-cta">
+  <h2>С чего начать</h2>
+  <p>На главной собраны все книги с поиском и фильтром по жанрам.</p>
+  <a class="button" href="/">Смотреть книги</a>
+</section>
+{% endblock %}

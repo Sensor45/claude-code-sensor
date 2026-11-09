@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% from "_macros.html" import cover, stars, meta %}
+
+{% block title %}Бестселлеры — Полка{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Бестселлеры</h1>
+  <p>Книги с самыми высокими оценками на нашей полке.</p>
+</section>
+
+{% if books %}
+<div class="grid">
+  {% for book in books %}
+  <a class="card" href="/books/{{ book.id }}">
+    {{ cover(book) }}
+    <div class="card-body">
+      <p class="meta"><span>№ {{ loop.index }}</span></p>
+      {{ meta(book) }}
+      <h2>{{ book.title }}</h2>
+      <p class="author">{{ book.author }}</p>
+      {{ stars(book.rating) }}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty">
+  <h2>Пока нет бестселлеров</h2>
+  <p>Здесь появятся книги с оценкой 4 и выше.</p>
+  <a class="button" href="/">На главную</a>
+</div>
+{% endif %}
+{% endblock %}

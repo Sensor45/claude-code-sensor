@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% from "_macros.html" import cover, stars, meta %}
+
+{% block content %}
+<section class="hero">
+  <h1>Книги, о которых хочется рассказать</h1>
+  <p>Заметки о прочитанном: что зацепило, что разочаровало и что стоит перечитать.</p>
+</section>
+
+<form class="toolbar" method="get" action="/" role="search">
+  <input class="search" type="search" name="q" value="{{ query }}" placeholder="Название или автор" aria-label="Поиск по книгам">
+  {% if genre %}<input type="hidden" name="genre" value="{{ genre }}">{% endif %}
+  <button class="button button-outline" type="submit">Найти</button>
+</form>
+
+{% if genres %}
+<nav class="genres" aria-label="Жанры">
+  <a class="chip" href="/{% if query %}?q={{ query | urlencode }}{% endif %}" {% if not genre %}aria-current="true"{% endif %}>Все</a>
+  {% for item in genres %}
+  <a class="chip" href="/?genre={{ item | urlencode }}{% if query %}&q={{ query | urlencode }}{% endif %}" {% if item == genre %}aria-current="true"{% endif %}>{{ item }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+
+{% if featured %}
+<a class="featured" href="/books/{{ featured.id }}">
+  {{ cover(featured) }}
+  <div class="featured-body">
+    <p class="eyebrow">Последняя запись</p>
+    <h2>{{ featured.title }}</h2>
+    <p class="author">{{ featured.author }}</p>
+    {{ stars(featured.rating) }}
+    <p class="summary">{{ featured.summary }}</p>
+    <span class="read-more">Читать запись →</span>
+  </div>
+</a>
+{% endif %}
+
+{% if filtered %}
+<p class="result-count">Найдено книг: {{ count }}</p>
+{% endif %}
+
+{% if books %}
+<div class="grid">
+  {% for book in books %}
+  <a class="card" href="/books/{{ book.id }}">
+    {{ cover(book) }}
+    <div class="card-body">
+      {{ meta(book) }}
+      <h2>{{ book.title }}</h2>
+      <p class="author">{{ book.author }}</p>
+      {{ stars(book.rating) }}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% elif not featured %}
+<div class="empty">
+  {% if filtered %}
+  <h2>Ничего не нашлось</h2>
+  <p>Попробуйте другой запрос или <a href="/">посмотрите все книги</a>.</p>
+  {% else %}
+  <h2>Полка пока пуста</h2>
+  <p>Добавьте первую книгу, и она появится здесь.</p>
+  <a class="button button-outline" href="/books/new">Добавить книгу</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

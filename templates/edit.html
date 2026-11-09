@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "Редактирование" if book.id else "Новая книга" }} · Полка{% endblock %}
+
+{% macro error(field) %}
+{% if errors[field] %}<p class="field-error" id="{{ field }}-error">{{ errors[field] }}</p>{% endif %}
+{% endmacro %}
+
+{% macro invalid(field) %}{% if errors[field] %}aria-invalid="true" aria-describedby="{{ field }}-error"{% endif %}{% endmacro %}
+
+{% block content %}
+<a class="back" href="{{ '/books/%s' % book.id if book.id else '/' }}">← {{ "К книге" if book.id else "Все книги" }}</a>
+
+<div class="form-page">
+  <h1>{{ "Редактирование" if book.id else "Новая книга" }}</h1>
+
+  {% if errors %}
+  <p class="form-alert" role="alert">Запись не сохранена. Проверьте отмеченные поля.</p>
+  {% endif %}
+
+  <form class="form" method="post">
+    <div class="field">
+      <label for="title">Название</label>
+      <input id="title" name="title" type="text" value="{{ book.title or '' }}" maxlength="200" required {{ invalid('title') }}>
+      {{ error('title') }}
+    </div>
+
+    <div class="field">
+      <label for="author">Автор</label>
+      <input id="author" name="author" type="text" value="{{ book.author or '' }}" maxlength="200" required {{ invalid('author') }}>
+      {{ error('author') }}
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="genre">Жанр</label>
+        <input id="genre" name="genre" type="text" value="{{ book.genre or '' }}" maxlength="60" list="genre-list" {{ invalid('genre') }}>
+        <datalist id="genre-list">
+          {% for item in genres %}<option value="{{ item }}"></option>{% endfor %}
+        </datalist>
+        {{ error('genre') }}
+      </div>
+
+      <div class="field">
+        <label for="year">Год издания</label>
+        <input id="year" name="year" type="text" inputmode="numeric" value="{{ book.year or '' }}" maxlength="4" {{ invalid('year') }}>
+        {{ error('year') }}
+      </div>
+    </div>
+
+    <fieldset class="field rate">
+      <legend>Оценка</legend>
+      <div class="rate-row">
+        {% for value in range(1, 6) %}
+        <label class="rate-star">
+          <input type="radio" name="rating" value="{{ value }}" {% if book.rating | string == value | string %}checked{% endif %}>
+          <span aria-hidden="true">★</span>
+          <span class="visually-hidden">{{ value }} из 5</span>
+        </label>
+        {% endfor %}
+        <label class="rate-none">
+          <input type="radio" name="rating" value="0" {% if book.rating | string == "0" %}checked{% endif %}>
+          <span>Без оценки</span>
+        </label>
+      </div>
+      {{ error('rating') }}
+    </fieldset>
+
+    <div class="field">
+      <label for="summary">Коротко о книге</label>
+      <textarea id="summary" name="summary" rows="3" maxlength="500" {{ invalid('summary') }}>{{ book.summary or '' }}</textarea>
+      <p class="field-hint">Показывается в начале записи и на главной странице.</p>
+      {{ error('summary') }}
+    </div>
+
+    <div class="field">
+      <label for="review">Рецензия</label>
+      <textarea id="review" name="review" rows="12" maxlength="20000" {{ invalid('review') }}>{{ book.review or '' }}</textarea>
+      {{ error('review') }}
+    </div>
+
+    <div class="form-actions">
+      <button class="button" type="submit">{{ "Сохранить изменения" if book.id else "Опубликовать" }}</button>
+      <a class="button button-quiet" href="{{ '/books/%s' % book.id if book.id else '/' }}">Отмена</a>
+    </div>
+  </form>
+
+  {% if book.id %}
+  <form class="danger" method="post" action="/books/{{ book.id }}/delete"
+        onsubmit="return confirm('Удалить эту книгу? Отменить это действие нельзя.')">
+    <div>
+      <h2>Удалить книгу</h2>
+      <p>Запись исчезнет из блога безвозвратно.</p>
+    </div>
+    <button class="button button-danger" type="submit">Удалить</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

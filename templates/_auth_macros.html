@@ -1,0 +1,11 @@
+{# Поле формы с подписью и сообщением об ошибке. Используется на страницах входа, регистрации и кабинета. #}
+{% macro field(name, label, type="text", value="", errors={}, error_key=None, autocomplete="off", hint=None) %}
+{% set key = error_key or name %}
+<div class="field">
+  <label for="{{ name }}">{{ label }}</label>
+  <input id="{{ name }}" name="{{ name }}" type="{{ type }}" value="{{ value }}" autocomplete="{{ autocomplete }}" required
+         {% if errors[key] %}aria-invalid="true" aria-describedby="{{ name }}-error"{% endif %}>
+  {% if hint and not errors[key] %}<p class="field-hint">{{ hint }}</p>{% endif %}
+  {% if errors[key] %}<p class="field-error" id="{{ name }}-error">{{ errors[key] }}</p>{% endif %}
+</div>
+{% endmacro %}

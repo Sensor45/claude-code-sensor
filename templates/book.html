@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% from "_macros.html" import cover, stars, meta %}
+
+{% block title %}{{ book.title }} · Полка{% endblock %}
+
+{% block content %}
+<a class="back" href="/">← Все книги</a>
+
+<article class="book">
+  <aside class="book-aside">
+    {{ cover(book) }}
+    <a class="button button-quiet button-block" href="/books/{{ book.id }}/edit">Редактировать</a>
+  </aside>
+
+  <div class="book-main">
+    {{ meta(book) }}
+    <h1>{{ book.title }}</h1>
+    <p class="author author-large">{{ book.author }}</p>
+    {{ stars(book.rating) }}
+
+    {% if book.summary %}<p class="lede">{{ book.summary }}</p>{% endif %}
+
+    {% if book.review %}
+    <div class="prose">
+      {% for paragraph in book.review | paragraphs %}
+      <p>{{ paragraph }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <p class="book-footer">
+      Опубликовано {{ book.created_at | format_date }}
+      {% if book.review %} · {{ book.review | reading_time }} мин чтения{% endif %}
+    </p>
+  </div>
+</article>
+{% endblock %}

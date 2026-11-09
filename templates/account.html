@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_auth_macros.html" import field %}
+
+{% block title %}Личный кабинет · Полка{% endblock %}
+
+{% block content %}
+<div class="form-page">
+  <h1>Личный кабинет</h1>
+  <p class="account-email">Вы вошли как <strong>{{ account.email }}</strong></p>
+
+  {% if errors %}
+  <p class="form-alert" role="alert">Изменения не сохранены. Проверьте отмеченные поля.</p>
+  {% endif %}
+
+  <section class="account-section">
+    <h2>Сменить email</h2>
+    <form class="form" method="post" action="/account/email">
+      {{ field("email", "Новый email", "email", values.email or "", errors, autocomplete="email") }}
+      {{ field("email_password", "Текущий пароль", "password", "", errors, autocomplete="current-password",
+               hint="Пароль нужен, чтобы подтвердить, что это вы.") }}
+      <div class="form-actions"><button class="button" type="submit">Сменить email</button></div>
+    </form>
+  </section>
+
+  <section class="account-section">
+    <h2>Сменить пароль</h2>
+    <form class="form" method="post" action="/account/password">
+      {{ field("current_password", "Текущий пароль", "password", "", errors, autocomplete="current-password") }}
+      {{ field("new_password", "Новый пароль", "password", "", errors, autocomplete="new-password",
+               hint="Не короче 8 символов, буквы и цифры. С других устройств вы выйдете.") }}
+      {{ field("new_password2", "Повторите новый пароль", "password", "", errors, autocomplete="new-password") }}
+      <div class="form-actions"><button class="button" type="submit">Сменить пароль</button></div>
+    </form>
+  </section>
+
+  <form class="danger" method="post" action="/logout">
+    <div>
+      <h2>Выйти из аккаунта</h2>
+      <p>Сессия на этом устройстве будет завершена.</p>
+    </div>
+    <button class="button button-quiet" type="submit">Выйти</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% macro cover(book) %}
+<div class="cover" style="--hue: {{ book.id | cover_hue }}" aria-hidden="true">
+  <div class="cover-text">
+    <span class="cover-title">{{ book.title }}</span>
+    <span class="cover-author">{{ book.author }}</span>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro stars(rating) %}
+{% if rating %}
+<span class="stars" role="img" aria-label="Оценка {{ rating }} из 5">
+  <span>{{ "★" * rating }}</span><span class="stars-empty">{{ "★" * (5 - rating) }}</span>
+</span>
+{% endif %}
+{% endmacro %}
+
+{% macro meta(book) %}
+<p class="meta">
+  {%- if book.genre %}<span>{{ book.genre }}</span>{% endif -%}
+  {%- if book.year %}<span>{{ book.year }}</span>{% endif -%}
+</p>
+{% endmacro %}
